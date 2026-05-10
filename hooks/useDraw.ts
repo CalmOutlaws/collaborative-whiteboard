@@ -9,6 +9,15 @@ export const useDraw = (onDraw: ({ ctx, currentPoint, prevPoint }: any) => void)
   const onMouseDown = () => setMouseDown(true);
 
   useEffect(() => {
+    const computePointInCanvas = (e: MouseEvent) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      return { x, y };
+    };
+
     const handler = (e: MouseEvent) => {
       if (!mouseDown) return;
       const currentPoint = computePointInCanvas(e);
@@ -18,13 +27,6 @@ export const useDraw = (onDraw: ({ ctx, currentPoint, prevPoint }: any) => void)
 
       onDraw({ ctx, currentPoint, prevPoint: prevPoint.current });
       prevPoint.current = currentPoint;
-    };
-
-    const computePointInCanvas = (e: MouseEvent) => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
 
     const mouseUpHandler = () => {
