@@ -1,33 +1,26 @@
 # CollabBoard.io 🎨
 
-A high-performance, professional-grade collaborative whiteboard engine designed for low-latency visual communication[cite: 2, 4]. Built with a focus on **event-driven architecture**, **state synchronization**, and **modular hooks**[cite: 2, 4].
+A production-grade, distributed real-time collaborative whiteboard engine designed for ultra-low latency canvas interactions. Engineered with an optimized event-driven architecture capable of scaling horizontally across server nodes.
 
-## 🚀 Features
-- **Real-time Sync:** Powered by a dedicated Socket.io engine for instantaneous drawing updates across all clients[cite: 2, 4].
-- **Vector Engine:** Custom-built React hooks for precise mouse coordinate tracking and canvas rendering[cite: 2, 4].
-- **Conflict Management:** (In Progress) Advanced concurrency handling using Redis Pub/Sub for horizontal scaling[cite: 2, 4].
-- **Modular Design:** Strictly typed with TypeScript to ensure data integrity during packet transmission[cite: 2, 4].
+## 🚀 Key Architectural Features
+- **Zero-Latency Feel (Optimistic UI):** Local user canvas operations execute instantly on vector layers while packet broadcasts execute asynchronously in the background.
+- **State Hydration Pipeline:** Utilizes atomic memory arrays via Redis caching layers, allowing users to safely refresh their sessions or join rooms mid-session without experiencing graphics context loss.
+- **Advanced Concurrency Handling:** Built with standalone Node.js ECMAScript Modules decoupled from core routing constraints to maximize WebSocket handshake capacity.
+- **Responsive Vector Toolset:** Supports dynamic brush metrics, multi-palette dynamic color configurations, responsive scaling matrices, and administrative canvas purging events.
 
 ## 🛠 Tech Stack
-- **Frontend:** Next.js 15 (App Router), Tailwind CSS[cite: 2, 4].
-- **Real-time Engine:** Socket.io with a standalone Node.js (ESM) server[cite: 3, 4].
-- **State Management:** Custom React Hooks and Context API[cite: 3, 4].
-- **Backend Infrastructure:** Redis (Planned for global state distribution)[cite: 2, 4].
+- **Frontend Engine:** Next.js 15 (App Router with Client Components optimizations)
+- **Real-time Vector Ingestion:** Socket.io (Standalone Server Architecture)
+- **State Storage & Recovery Cache:** Redis Database Instance
+- **Local Infrastructure Orchestration:** Docker Containerization Patterns
+- **Typing Guardrails:** Systemwide TypeScript
 
-## 📂 Project Structure
-- `server.mjs`: Standalone WebSocket server with custom CORS security policies[cite: 2, 3, 4].
-- `hooks/useDraw.ts`: Abstracted drawing logic and canvas event listeners[cite: 2, 3, 4].
-- `types/canvas.ts`: Unified type definitions shared across the full stack[cite: 2, 3, 4].
-- `app/`: Next.js application directory utilizing modern routing patterns[cite: 2, 4].
+## 📂 Structural Highlights
+- `server.mjs`: Standalone multi-client state communication engine using native JavaScript modules.
+- `components/Whiteboard.tsx`: Floating interface layer controlling mouse trajectory conversions and canvas layout behaviors.
+- `hooks/useDraw.ts`: Abstracted event listeners managing coordinate transformations and active drag calculations.
 
-## ⚙️ Development Setup
-1. **Clone the repository.**
-2. **Install dependencies:**
+## ⚙️ Engineering Launch Instructions
+1. **Clone & Install Dependencies:**
    ```bash
    npm install
-3. **Start the WebSocket Server:**
-    ```bash
-    node server.mjs
-4. **Run the Next.js Frontend:**
-   ```bash
-   npm run dev
