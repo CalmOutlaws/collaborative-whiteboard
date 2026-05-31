@@ -10,8 +10,8 @@ dotenv.config();
 const httpServer = createServer();
 
 // Dynamically handle production CORS rules
-const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS 
-  ? process.env.ALLOWED_ORIGINS.split(',') 
+const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
   : ["http://localhost:3000", "http://192.168.0.100:3000"];
 
 const io = new Server(httpServer, {
@@ -53,7 +53,25 @@ io.on('connection', async (socket) => {
   socket.on('draw-line', async (state) => {
     socket.broadcast.emit('draw-line', state);
     try {
-      await redis.rpush('canvas_history', JSON.stringify(state));
+      await redis.rpush('canvas_history', JSON.stringify({...state, type: 'line'}));
+    } catch (error) {
+      console.error('Redis append failed:', error);
+    }
+  });
+
+  socket.on('draw-shape', async (state) => {
+    socket.broadcast.emit('draw-shape', state);
+    try {
+      await redis.rpush('canvas_history', JSON.stringify({...state, type: 'shape'}));
+    } catch (error) {
+      console.error('Redis append failed:', error);
+    }
+  });
+
+  socket.on('draw-text', async (state) => {
+    socket.broadcast.emit('draw-text', state);
+    try {
+      await redis.rpush('canvas_history', JSON.stringify({...state, type: 'text'}));
     } catch (error) {
       console.error('Redis append failed:', error);
     }
