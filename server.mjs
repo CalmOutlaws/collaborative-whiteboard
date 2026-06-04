@@ -59,6 +59,27 @@ io.on('connection', async (socket) => {
     }
   });
 
+  // Atomic History Overwrite for Undo/Redo operations
+  socket.on('update-history', async (updatedHistory) => {
+    // Sync the state alteration with all other active nodes immediately
+    socket.broadcast.emit('history-updated', updatedHistory);
+
+    try {
+      // Overwrite Redis storage cleanly
+      await redis.del('canvas_history');
+      if (updatedHistory.length > 0) {
+        // Map individual nodes back into string packets for safe storage execution
+        const pipeline = redis.pipeline();
+        updatedHistory.forEach((line) => {
+          pipeline.rpush('canvas_history', JSON.stringify(line));
+        });
+        await pipeline.exec();
+      }
+    } catch (error) {
+      console.error('Failed to synchronize structural Undo/Redo states inside Redis:', error);
+    }
+  });
+
   socket.on('draw-shape', async (state) => {
     socket.broadcast.emit('draw-shape', state);
     try {
